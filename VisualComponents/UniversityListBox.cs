@@ -50,8 +50,9 @@ namespace VisualComponents
             listBox.Refresh();
         }
 
-        public T GetItem<T>(T obj)
+        public T GetItem<T>() where T : class, new()
         {
+            T obj = new T();
             Type type = typeof(T);
             FieldInfo[] fields = type.GetFields();
             PropertyInfo[] properties = type.GetProperties();

@@ -21,7 +21,7 @@ namespace TestApp
 
         private void buttonFillListBox_Click(object sender, EventArgs e)
         {
-            universityListBox.LayoutString("Имя /Name] , степендия /Salary] , возраст /Age]", '/', ']');
+            universityListBox.LayoutString("Имя {Name} , степендия {Salary} , возраст {Age}", '{', '}');
             List<Student> list = new List<Student>();
 
             list.Add(new Student { Name = "Иван Иванов", Salary = 1000, Age = 24 });
@@ -33,8 +33,8 @@ namespace TestApp
 
         private void buttonPickFromListBox_Click(object sender, EventArgs e)
         {
-            Student student =  universityListBox.GetItem<Student>(new Student());
-            MessageBox.Show(student.Name + " " + student.Salary);
+            Student student =  universityListBox.GetItem<Student>();
+            MessageBox.Show(student.Name + " " + student.Salary + " " + student.Age);
         }
     }
 }
