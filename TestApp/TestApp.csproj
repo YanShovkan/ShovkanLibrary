@@ -81,6 +81,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NotVisualComponents\NotVisualComponents.csproj">
+      <Project>{b1e54769-b99b-4a4f-9b71-50894c888983}</Project>
+      <Name>NotVisualComponents</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VisualComponents\VisualComponents.csproj">
       <Project>{dc0f28e4-430f-456f-988a-2a32045ecef4}</Project>
       <Name>VisualComponents</Name>

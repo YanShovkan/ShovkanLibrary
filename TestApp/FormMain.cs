@@ -8,11 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VisualComponents;
+using NotVisualComponents;
 
 namespace TestApp
 {
     public partial class FormMain : Form
     {
+        UniversityWordTable universityWordTable = new UniversityWordTable();
         public FormMain()
         {
             InitializeComponent();
@@ -33,8 +35,25 @@ namespace TestApp
 
         private void buttonPickFromListBox_Click(object sender, EventArgs e)
         {
-            Student student =  universityListBox.GetItem<Student>();
+            Student student = universityListBox.GetItem<Student>();
             MessageBox.Show(student.Name + " " + student.Salary + " " + student.Age);
+        }
+
+        private void buttonTest_Click(object sender, EventArgs e)
+        {
+            List<Student> list = new List<Student>();
+
+            list.Add(new Student { Name = "Иван Иванов", Salary = 1000, Age = 24 });
+            list.Add(new Student { Name = "Вася", Salary = 410, Age = 19 });
+            list.Add(new Student { Name = "Макс", Salary = 255, Age = 34 });
+
+            using (var dialog = new SaveFileDialog { Filter = "docx|*.docx" })
+            {
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    universityWordTable.CreateDoc(dialog.FileName, "Егор бэбридзе", list, null, new Dictionary<string, int> { { "Age", 2000 }, { "Name", 4000 }, { "Salary", 3000 } });
+                }
+            }
         }
     }
 }

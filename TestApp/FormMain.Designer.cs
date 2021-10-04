@@ -34,6 +34,7 @@ namespace TestApp
             this.universityListBox = new VisualComponents.UniversityListBox();
             this.buttonFillListBox = new System.Windows.Forms.Button();
             this.buttonPickFromListBox = new System.Windows.Forms.Button();
+            this.buttonTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // universityTextBox
@@ -83,11 +84,22 @@ namespace TestApp
             this.buttonPickFromListBox.UseVisualStyleBackColor = true;
             this.buttonPickFromListBox.Click += new System.EventHandler(this.buttonPickFromListBox_Click);
             // 
+            // buttonTest
+            // 
+            this.buttonTest.Location = new System.Drawing.Point(408, 202);
+            this.buttonTest.Name = "buttonTest";
+            this.buttonTest.Size = new System.Drawing.Size(380, 236);
+            this.buttonTest.TabIndex = 8;
+            this.buttonTest.Text = "Бэбра";
+            this.buttonTest.UseVisualStyleBackColor = true;
+            this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonTest);
             this.Controls.Add(this.buttonPickFromListBox);
             this.Controls.Add(this.buttonFillListBox);
             this.Controls.Add(this.universityListBox);
@@ -105,6 +117,7 @@ namespace TestApp
         private VisualComponents.UniversityListBox universityListBox;
         private System.Windows.Forms.Button buttonFillListBox;
         private System.Windows.Forms.Button buttonPickFromListBox;
+        private System.Windows.Forms.Button buttonTest;
     }
 }
 

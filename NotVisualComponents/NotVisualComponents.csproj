@@ -54,6 +54,12 @@
     <Compile Include="UniversityWordDocument.Designer.cs">
       <DependentUpon>UniversityWordDocument.cs</DependentUpon>
     </Compile>
+    <Compile Include="UniversityWordTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UniversityWordTable.Designer.cs">
+      <DependentUpon>UniversityWordTable.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
