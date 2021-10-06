@@ -25,185 +25,221 @@ namespace NotVisualComponents
 
         public void CreateDoc<T>(string parth, string title, List<T> enterData, List<int[]> consolidatedСolumns, Dictionary<string, int> columnNamesAndSize, List<string> columnTitles)
         {
-            using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(parth, WordprocessingDocumentType.Document))
+
+            foreach (int[] firstOneGroupOfConsolidatedСolumns in consolidatedСolumns)
             {
-                MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
-                mainPart.Document = new Document();
-                Body docBody = mainPart.Document.AppendChild(new Body());
-                docBody.AppendChild(CreateParagraph(new WordParagraph
+                foreach (int firstColumnIndex in firstOneGroupOfConsolidatedСolumns)
                 {
-                    Texts = new List<(string, WordTextProperties)> { (title, new WordTextProperties { Bold = true, Size = "48" }) },
-                    TextProperties = new WordTextProperties
+                    foreach (int[] secondOneGroupOfConsolidatedСolumns in consolidatedСolumns)
                     {
-                        Size = "24",
-                        JustificationValues = JustificationValues.Center
-                    }
-                }));
-
-                Table table = new Table();
-
-                // Create a TableProperties object and specify its border information.  
-                TableProperties tblProp = new TableProperties(
-                    new TableBorders(new TopBorder()
-                    { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
-                        new BottomBorder()
-                        { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
-                        new LeftBorder()
-                        { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
-                        new RightBorder()
-                        { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
-                        new InsideHorizontalBorder()
-                        { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
-                        new InsideVerticalBorder()
-                        { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 })
-                );
-
-                table.Append(tblProp);
-
-                foreach (int[] firstOneGroupOfConsolidatedСolumns in consolidatedСolumns)
-                {
-                    foreach (int firstColumnIndex in firstOneGroupOfConsolidatedСolumns)
-                    {
-                        foreach (int[] secondOneGroupOfConsolidatedСolumns in consolidatedСolumns)
+                        if (firstOneGroupOfConsolidatedСolumns != secondOneGroupOfConsolidatedСolumns)
                         {
-                            if (firstOneGroupOfConsolidatedСolumns != secondOneGroupOfConsolidatedСolumns)
+                            foreach (int secondColumnIndex in secondOneGroupOfConsolidatedСolumns)
                             {
-                                foreach (int secondColumnIndex in secondOneGroupOfConsolidatedСolumns)
+                                if (firstColumnIndex == secondColumnIndex)
                                 {
-                                    if (firstColumnIndex == secondColumnIndex)
-                                    {
-                                        throw new Exception("Error");
-                                    }
+                                    throw new Exception("Error");
                                 }
                             }
                         }
                     }
                 }
+            }
 
-                foreach (int[] oneGroupOfConsolidatedСolumns in consolidatedСolumns)
+            foreach (string columnName in columnNamesAndSize.Keys)
+            {
+                int propertyIndex = 0;
+                foreach (PropertyInfo property in typeof(T).GetProperties())
                 {
-                    for (int i = 0; i < oneGroupOfConsolidatedСolumns.Length; i++)
+                    if (property.Name == columnName)
                     {
-                        for (int j = 0; j < oneGroupOfConsolidatedСolumns.Length - 1; j++)
+                        break;
+                    }
+                    if (property.Name != columnName && typeof(T).GetProperties().Length - 1 == propertyIndex)
+                    {
+                        throw new Exception("Error");
+                    }
+                    propertyIndex++;
+                }
+            }
+
+            int consolidatedСolumnsCount = 0;
+            foreach (int[] consolidatedСolumnGroup in consolidatedСolumns)
+            {
+                consolidatedСolumnsCount += consolidatedСolumnGroup.Length;
+            }
+
+            if (columnTitles.Count != ((columnNamesAndSize.Count - consolidatedСolumnsCount) + consolidatedСolumns.Count * 2))
+            {
+                throw new Exception("Error");
+            }
+            if (parth == null || title == null || enterData == null || consolidatedСolumns == null || columnNamesAndSize == null || columnTitles == null)
+            {
+                throw new Exception("Error");
+            }
+            else
+            {
+                using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(parth, WordprocessingDocumentType.Document))
+                {
+                    MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
+                    mainPart.Document = new Document();
+                    Body docBody = mainPart.Document.AppendChild(new Body());
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<(string, WordTextProperties)> { (title, new WordTextProperties { Bold = true, Size = "48" }) },
+                        TextProperties = new WordTextProperties
                         {
-                            if (oneGroupOfConsolidatedСolumns[j] > oneGroupOfConsolidatedСolumns[j + 1])
+                            Size = "24",
+                            JustificationValues = JustificationValues.Center
+                        }
+                    }));
+
+                    Table table = new Table();
+
+                    TableProperties tblProp = new TableProperties(
+                        new TableBorders(new TopBorder()
+                        { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
+                            new BottomBorder()
+                            { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
+                            new LeftBorder()
+                            { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
+                            new RightBorder()
+                            { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
+                            new InsideHorizontalBorder()
+                            { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 },
+                            new InsideVerticalBorder()
+                            { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 })
+                    );
+
+                    table.Append(tblProp);
+
+                    foreach (int[] oneGroupOfConsolidatedСolumns in consolidatedСolumns)
+                    {
+                        for (int i = 0; i < oneGroupOfConsolidatedСolumns.Length; i++)
+                        {
+                            for (int j = 0; j < oneGroupOfConsolidatedСolumns.Length - 1; j++)
                             {
-                                int temp = oneGroupOfConsolidatedСolumns[j];
-                                oneGroupOfConsolidatedСolumns[j] = oneGroupOfConsolidatedСolumns[j + 1];
-                                oneGroupOfConsolidatedСolumns[j + 1] = temp;
+                                if (oneGroupOfConsolidatedСolumns[j] > oneGroupOfConsolidatedСolumns[j + 1])
+                                {
+                                    int temp = oneGroupOfConsolidatedСolumns[j];
+                                    oneGroupOfConsolidatedСolumns[j] = oneGroupOfConsolidatedСolumns[j + 1];
+                                    oneGroupOfConsolidatedСolumns[j + 1] = temp;
+                                }
                             }
                         }
                     }
-                }
 
-                for (int i = 0; i < consolidatedСolumns.Count; i++)
-                {
-                    for (int j = 0; j < consolidatedСolumns.Count - 1; j++)
+                    for (int i = 0; i < consolidatedСolumns.Count; i++)
                     {
-                        if (consolidatedСolumns[j][0] > consolidatedСolumns[j + 1][0])
+                        for (int j = 0; j < consolidatedСolumns.Count - 1; j++)
                         {
-                            int[] temp = consolidatedСolumns[j];
-                            consolidatedСolumns[j] = consolidatedСolumns[j + 1];
-                            consolidatedСolumns[j + 1] = temp;
+                            if (consolidatedСolumns[j][0] > consolidatedСolumns[j + 1][0])
+                            {
+                                int[] temp = consolidatedСolumns[j];
+                                consolidatedСolumns[j] = consolidatedСolumns[j + 1];
+                                consolidatedСolumns[j + 1] = temp;
+                            }
                         }
                     }
-                }
 
-                TableRow firstTittleRow = new TableRow();
-                TableRow secondTittleRow = new TableRow();
-                
-                int consolidatedСolumnsGroupIndex = 0;
-                int columnInGroupIndex = 0;
-                Queue<string> columnTitlesQueue = new Queue<string>(columnTitles);
+                    TableRow firstTittleRow = new TableRow();
+                    TableRow secondTittleRow = new TableRow();
 
-                for (int i = 0; i < columnNamesAndSize.Count; i++)
-                {
-                    if(i != consolidatedСolumns[consolidatedСolumnsGroupIndex][columnInGroupIndex])
+                    int consolidatedСolumnsGroupIndex = 0;
+                    Queue<string> columnTitlesQueue = new Queue<string>(columnTitles);
+
+                    for (int i = 0; i < columnNamesAndSize.Count; i++)
                     {
-                        TableCell firstCell = new TableCell();
-                        TableCell secondCell = new TableCell();
-
-                        firstCell.Append(
-                            new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }),
-                            new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
-                            );
-
-                        secondCell.Append(
-                           new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }),
-                           new Paragraph(new Run(new Text(null)))
-                           );
-
-                        firstTittleRow.Append(firstCell);
-                        secondTittleRow.Append(secondCell);
-                    }
-                    else
-                    {
-                        TableCell firstCell = new TableCell();
-                        TableCell secondCell = new TableCell();
-
-                        firstCell.Append(
-                            new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }),
-                            new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
-                            );
-
-                        secondCell.Append(
-                           new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }),
-                           new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
-                           );
-
-                        firstTittleRow.Append(firstCell);
-                        secondTittleRow.Append(secondCell);
-
-                        for (int j = 0; j < consolidatedСolumns[consolidatedСolumnsGroupIndex].Length - 1; j++)
+                        if (i != consolidatedСolumns[consolidatedСolumnsGroupIndex][0])
                         {
-                            TableCell nextFirstCell = new TableCell();
-                            TableCell nextSecondCell = new TableCell();
+                            TableCell firstCell = new TableCell();
+                            TableCell secondCell = new TableCell();
 
-                            nextFirstCell.Append(
-                                new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }),
-                                new Paragraph(new Run(new Text(null)))
+                            firstCell.Append(
+                                new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }),
+                                new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
                                 );
 
-                            nextSecondCell.Append(
-                               new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }),
+                            secondCell.Append(
+                               new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }),
                                new Paragraph(new Run(new Text(null)))
                                );
 
-                            firstTittleRow.Append(nextFirstCell);
-                            secondTittleRow.Append(nextSecondCell);
+                            firstTittleRow.Append(firstCell);
+                            secondTittleRow.Append(secondCell);
                         }
-
-                        i += consolidatedСolumns[consolidatedСolumnsGroupIndex].Length - 1;
-                    }
-                }
-                   
-                table.Append(firstTittleRow, secondTittleRow);
-
-                foreach (T data in enterData)
-                {
-                    TableRow tableRow = new TableRow();
-                    foreach (string columnName in columnNamesAndSize.Keys)
-                    {
-                        TableCell tableCell = new TableCell();
-
-                        foreach (PropertyInfo property in typeof(T).GetProperties())
+                        else
                         {
-                            if (property.Name.Equals(columnName))
-                            {
-                                tableCell.Append(
-                                    new TableCellProperties(new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = columnNamesAndSize[columnName].ToString() }),
-                                    new Paragraph(new Run(new Text(property.GetValue(data).ToString())))
-                                    );
-                                break;
-                            }
-                        }
+                            TableCell firstCell = new TableCell();
+                            TableCell secondCell = new TableCell();
 
-                        tableRow.Append(tableCell);
+                            firstCell.Append(
+                                new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }),
+                                new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
+                                );
+
+                            secondCell.Append(
+                               new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }),
+                               new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
+                               );
+
+                            firstTittleRow.Append(firstCell);
+                            secondTittleRow.Append(secondCell);
+
+                            for (int j = 0; j < consolidatedСolumns[consolidatedСolumnsGroupIndex].Length - 1; j++)
+                            {
+                                TableCell nextFirstCell = new TableCell();
+                                TableCell nextSecondCell = new TableCell();
+
+                                nextFirstCell.Append(
+                                    new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }),
+                                    new Paragraph(new Run(new Text(null)))
+                                    );
+
+                                nextSecondCell.Append(
+                                   new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }),
+                                   new Paragraph(new Run(new Text(null)))
+                                   );
+
+                                firstTittleRow.Append(nextFirstCell);
+                                secondTittleRow.Append(nextSecondCell);
+                            }
+
+                            i += consolidatedСolumns[consolidatedСolumnsGroupIndex].Length - 1;
+                            consolidatedСolumnsGroupIndex++;
+                        }
                     }
-                    table.Append(tableRow);
+
+                    table.Append(firstTittleRow, secondTittleRow);
+
+                    foreach (T data in enterData)
+                    {
+                        TableRow tableRow = new TableRow();
+                        foreach (string columnName in columnNamesAndSize.Keys)
+                        {
+                            TableCell tableCell = new TableCell();
+
+                            foreach (PropertyInfo property in typeof(T).GetProperties())
+                            {
+                                if (property.Name.Equals(columnName))
+                                {
+                                    tableCell.Append(
+                                        new TableCellProperties(new TableCellWidth() { Type = TableWidthUnitValues.Dxa, Width = columnNamesAndSize[columnName].ToString() }),
+                                        new Paragraph(new Run(new Text(property.GetValue(data).ToString())))
+                                        );
+                                    break;
+                                }
+                            }
+
+                            tableRow.Append(tableCell);
+                        }
+                        table.Append(tableRow);
+                    }
+                    docBody.Append(table);
                 }
-                docBody.Append(table);
             }
+
+
         }
 
         private static SectionProperties CreateSectionProperties()

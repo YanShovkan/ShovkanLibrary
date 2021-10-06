@@ -43,8 +43,8 @@ namespace TestApp
         {
             List<Student> list = new List<Student>();
             Dictionary<string, int> columncolumnNamesAndSize = new Dictionary<string, int> { { "Age", 2000 }, { "Name", 4000 }, { "Salary", 3000 } };
-            List<string> titles =  new List<string> { "Как", "Так", "Ладно"};
-            List<int[]> consolidatedСolumns = new List<int[]> { new int[] { 2, 1 } };
+            List<string> titles =  new List<string> { "Возраст", "Имя и стипендия", "В рублях"};
+            List<int[]> consolidatedСolumns = new List<int[]> { new int[] { 1, 2 } };
 
             list.Add(new Student { Name = "Иван Иванов", Salary = 1000, Age = 24 });
             list.Add(new Student { Name = "Вася", Salary = 410, Age = 19 });
@@ -54,7 +54,7 @@ namespace TestApp
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    universityWordTable.CreateDoc(dialog.FileName, "Егор бэбридзе", list, consolidatedСolumns, columncolumnNamesAndSize, titles);
+                    universityWordTable.CreateDoc(dialog.FileName, "Отчет по студентам в таблице", list, consolidatedСolumns, columncolumnNamesAndSize, titles);
                 }
             }
         }
