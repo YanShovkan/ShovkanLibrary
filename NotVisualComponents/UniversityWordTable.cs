@@ -68,11 +68,11 @@ namespace NotVisualComponents
             {
                 consolidatedСolumnsCount += consolidatedСolumnGroup.Length;
             }
-
-            if (columnTitles.Count != ((columnNamesAndSize.Count - consolidatedСolumnsCount) + consolidatedСolumns.Count * 2))
+            if (columnTitles.Count != ((columnNamesAndSize.Count - consolidatedСolumnsCount) + consolidatedСolumns.Count  + consolidatedСolumnsCount))
             {
                 throw new Exception("Error");
             }
+
             if (parth == null || title == null || enterData == null || consolidatedСolumns == null || columnNamesAndSize == null || columnTitles == null)
             {
                 throw new Exception("Error");
@@ -150,25 +150,7 @@ namespace NotVisualComponents
 
                     for (int i = 0; i < columnNamesAndSize.Count; i++)
                     {
-                        if (i != consolidatedСolumns[consolidatedСolumnsGroupIndex][0])
-                        {
-                            TableCell firstCell = new TableCell();
-                            TableCell secondCell = new TableCell();
-
-                            firstCell.Append(
-                                new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }),
-                                new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
-                                );
-
-                            secondCell.Append(
-                               new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }),
-                               new Paragraph(new Run(new Text(null)))
-                               );
-
-                            firstTittleRow.Append(firstCell);
-                            secondTittleRow.Append(secondCell);
-                        }
-                        else
+                        if (consolidatedСolumnsGroupIndex < consolidatedСolumns.Count && i == consolidatedСolumns[consolidatedСolumnsGroupIndex][0])
                         {
                             TableCell firstCell = new TableCell();
                             TableCell secondCell = new TableCell();
@@ -197,8 +179,8 @@ namespace NotVisualComponents
                                     );
 
                                 nextSecondCell.Append(
-                                   new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }),
-                                   new Paragraph(new Run(new Text(null)))
+                                   new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }),
+                                   new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
                                    );
 
                                 firstTittleRow.Append(nextFirstCell);
@@ -207,6 +189,24 @@ namespace NotVisualComponents
 
                             i += consolidatedСolumns[consolidatedСolumnsGroupIndex].Length - 1;
                             consolidatedСolumnsGroupIndex++;
+                        }
+                        else
+                        {
+                            TableCell firstCell = new TableCell();
+                            TableCell secondCell = new TableCell();
+
+                            firstCell.Append(
+                                new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }),
+                                new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
+                                );
+
+                            secondCell.Append(
+                               new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }),
+                               new Paragraph(new Run(new Text(null)))
+                               );
+
+                            firstTittleRow.Append(firstCell);
+                            secondTittleRow.Append(secondCell);
                         }
                     }
 
@@ -230,7 +230,6 @@ namespace NotVisualComponents
                                     break;
                                 }
                             }
-
                             tableRow.Append(tableCell);
                         }
                         table.Append(tableRow);
@@ -238,8 +237,6 @@ namespace NotVisualComponents
                     docBody.Append(table);
                 }
             }
-
-
         }
 
         private static SectionProperties CreateSectionProperties()

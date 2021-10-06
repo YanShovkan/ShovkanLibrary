@@ -43,8 +43,8 @@ namespace TestApp
         {
             List<Student> list = new List<Student>();
             Dictionary<string, int> columncolumnNamesAndSize = new Dictionary<string, int> { { "Age", 2000 }, { "Name", 4000 }, { "Salary", 3000 } };
-            List<string> titles =  new List<string> { "Возраст", "Имя и стипендия", "В рублях"};
-            List<int[]> consolidatedСolumns = new List<int[]> { new int[] { 1, 2 } };
+            List<string> titles =  new List<string> { "Личные данные", "Возраст", "Имя", "Стипендия" };
+            List<int[]> consolidatedСolumns = new List<int[]> { new int[] { 1, 0 } };
 
             list.Add(new Student { Name = "Иван Иванов", Salary = 1000, Age = 24 });
             list.Add(new Student { Name = "Вася", Salary = 410, Age = 19 });
