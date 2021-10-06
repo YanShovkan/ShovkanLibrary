@@ -42,6 +42,9 @@ namespace TestApp
         private void buttonTest_Click(object sender, EventArgs e)
         {
             List<Student> list = new List<Student>();
+            Dictionary<string, int> columncolumnNamesAndSize = new Dictionary<string, int> { { "Age", 2000 }, { "Name", 4000 }, { "Salary", 3000 } };
+            List<string> titles =  new List<string> { "Как", "Так"};
+            List<int[]> consolidatedСolumns = new List<int[]> { new int[] { 1, 2 }, new int[] { 2, 3 } };
 
             list.Add(new Student { Name = "Иван Иванов", Salary = 1000, Age = 24 });
             list.Add(new Student { Name = "Вася", Salary = 410, Age = 19 });
@@ -51,7 +54,7 @@ namespace TestApp
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    universityWordTable.CreateDoc(dialog.FileName, "Егор бэбридзе", list, null, new Dictionary<string, int> { { "Age", 2000 }, { "Name", 4000 }, { "Salary", 3000 } });
+                    universityWordTable.CreateDoc(dialog.FileName, "Егор бэбридзе", list, consolidatedСolumns, columncolumnNamesAndSize, titles);
                 }
             }
         }

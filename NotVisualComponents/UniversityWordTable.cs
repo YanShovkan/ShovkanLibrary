@@ -23,7 +23,7 @@ namespace NotVisualComponents
             InitializeComponent();
         }
 
-        public void CreateDoc<T>(string parth, string title, List<T> enterData, List<int[]> consolidatedСolumns, Dictionary<string, int> columnNamesAndSize)
+        public void CreateDoc<T>(string parth, string title, List<T> enterData, List<int[]> consolidatedСolumns, Dictionary<string, int> columnNamesAndSize, List<string> columnTitles)
         {
             using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(parth, WordprocessingDocumentType.Document))
             {
@@ -58,10 +58,50 @@ namespace NotVisualComponents
                         { Val = new EnumValue<BorderValues>(BorderValues.Sawtooth), Size = 24 })
                 );
 
+                table.Append(tblProp);
 
-                table.AppendChild<TableProperties>(tblProp);
+                TableRow firstTittleRow = new TableRow();
+                TableRow secondTittleRow = new TableRow();
 
+                foreach (int[] firstOneGroupOfConsolidatedСolumns in consolidatedСolumns)
+                {
+                    foreach(int firstColumnIndex in firstOneGroupOfConsolidatedСolumns)
+                    {
+                        foreach (int[] secondOneGroupOfConsolidatedСolumns in consolidatedСolumns)
+                        {
+                            if (firstOneGroupOfConsolidatedСolumns != secondOneGroupOfConsolidatedСolumns)
+                            {
+                                foreach (int secondColumnIndex in secondOneGroupOfConsolidatedСolumns)
+                                {
+                                    if(firstColumnIndex == secondColumnIndex)
+                                    {
+                                        throw new Exception("Error");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
+               
+
+                TableCell cell1 = new TableCell();
+                TableCell cell2 = new TableCell();
+
+                cell1.Append(
+                    new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }),
+                    new Paragraph(new Run(new Text(null)))
+                    );
+
+                cell2.Append(
+                   new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }),
+                   new Paragraph(new Run(new Text(null)))
+                   );
+
+                tr1.Append(cell1);
+                tr2.Append(cell2);
+
+                table.Append(tr1, tr2);
 
                 foreach (T data in enterData)
                 {
@@ -86,11 +126,8 @@ namespace NotVisualComponents
                     }
                     table.Append(tableRow);
                 }
-
                 docBody.Append(table);
-
             }
-
         }
 
         private static SectionProperties CreateSectionProperties()
