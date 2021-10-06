@@ -60,12 +60,9 @@ namespace NotVisualComponents
 
                 table.Append(tblProp);
 
-                TableRow firstTittleRow = new TableRow();
-                TableRow secondTittleRow = new TableRow();
-
                 foreach (int[] firstOneGroupOfConsolidatedСolumns in consolidatedСolumns)
                 {
-                    foreach(int firstColumnIndex in firstOneGroupOfConsolidatedСolumns)
+                    foreach (int firstColumnIndex in firstOneGroupOfConsolidatedСolumns)
                     {
                         foreach (int[] secondOneGroupOfConsolidatedСolumns in consolidatedСolumns)
                         {
@@ -73,7 +70,7 @@ namespace NotVisualComponents
                             {
                                 foreach (int secondColumnIndex in secondOneGroupOfConsolidatedСolumns)
                                 {
-                                    if(firstColumnIndex == secondColumnIndex)
+                                    if (firstColumnIndex == secondColumnIndex)
                                     {
                                         throw new Exception("Error");
                                     }
@@ -83,25 +80,104 @@ namespace NotVisualComponents
                     }
                 }
 
-               
+                foreach (int[] oneGroupOfConsolidatedСolumns in consolidatedСolumns)
+                {
+                    for (int i = 0; i < oneGroupOfConsolidatedСolumns.Length; i++)
+                    {
+                        for (int j = 0; j < oneGroupOfConsolidatedСolumns.Length - 1; j++)
+                        {
+                            if (oneGroupOfConsolidatedСolumns[j] > oneGroupOfConsolidatedСolumns[j + 1])
+                            {
+                                int temp = oneGroupOfConsolidatedСolumns[j];
+                                oneGroupOfConsolidatedСolumns[j] = oneGroupOfConsolidatedСolumns[j + 1];
+                                oneGroupOfConsolidatedСolumns[j + 1] = temp;
+                            }
+                        }
+                    }
+                }
 
-                TableCell cell1 = new TableCell();
-                TableCell cell2 = new TableCell();
+                for (int i = 0; i < consolidatedСolumns.Count; i++)
+                {
+                    for (int j = 0; j < consolidatedСolumns.Count - 1; j++)
+                    {
+                        if (consolidatedСolumns[j][0] > consolidatedСolumns[j + 1][0])
+                        {
+                            int[] temp = consolidatedСolumns[j];
+                            consolidatedСolumns[j] = consolidatedСolumns[j + 1];
+                            consolidatedСolumns[j + 1] = temp;
+                        }
+                    }
+                }
 
-                cell1.Append(
-                    new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }),
-                    new Paragraph(new Run(new Text(null)))
-                    );
+                TableRow firstTittleRow = new TableRow();
+                TableRow secondTittleRow = new TableRow();
+                
+                int consolidatedСolumnsGroupIndex = 0;
+                int columnInGroupIndex = 0;
+                Queue<string> columnTitlesQueue = new Queue<string>(columnTitles);
 
-                cell2.Append(
-                   new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }),
-                   new Paragraph(new Run(new Text(null)))
-                   );
+                for (int i = 0; i < columnNamesAndSize.Count; i++)
+                {
+                    if(i != consolidatedСolumns[consolidatedСolumnsGroupIndex][columnInGroupIndex])
+                    {
+                        TableCell firstCell = new TableCell();
+                        TableCell secondCell = new TableCell();
 
-                tr1.Append(cell1);
-                tr2.Append(cell2);
+                        firstCell.Append(
+                            new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Restart }),
+                            new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
+                            );
 
-                table.Append(tr1, tr2);
+                        secondCell.Append(
+                           new TableCellProperties(new VerticalMerge() { Val = MergedCellValues.Continue }),
+                           new Paragraph(new Run(new Text(null)))
+                           );
+
+                        firstTittleRow.Append(firstCell);
+                        secondTittleRow.Append(secondCell);
+                    }
+                    else
+                    {
+                        TableCell firstCell = new TableCell();
+                        TableCell secondCell = new TableCell();
+
+                        firstCell.Append(
+                            new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }),
+                            new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
+                            );
+
+                        secondCell.Append(
+                           new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Restart }),
+                           new Paragraph(new Run(new Text(columnTitlesQueue.Dequeue())))
+                           );
+
+                        firstTittleRow.Append(firstCell);
+                        secondTittleRow.Append(secondCell);
+
+                        for (int j = 0; j < consolidatedСolumns[consolidatedСolumnsGroupIndex].Length - 1; j++)
+                        {
+                            TableCell nextFirstCell = new TableCell();
+                            TableCell nextSecondCell = new TableCell();
+
+                            nextFirstCell.Append(
+                                new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }),
+                                new Paragraph(new Run(new Text(null)))
+                                );
+
+                            nextSecondCell.Append(
+                               new TableCellProperties(new HorizontalMerge() { Val = MergedCellValues.Continue }),
+                               new Paragraph(new Run(new Text(null)))
+                               );
+
+                            firstTittleRow.Append(nextFirstCell);
+                            secondTittleRow.Append(nextSecondCell);
+                        }
+
+                        i += consolidatedСolumns[consolidatedСolumnsGroupIndex].Length - 1;
+                    }
+                }
+                   
+                table.Append(firstTittleRow, secondTittleRow);
 
                 foreach (T data in enterData)
                 {
