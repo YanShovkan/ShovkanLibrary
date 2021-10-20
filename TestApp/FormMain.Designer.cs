@@ -29,40 +29,10 @@ namespace TestApp
         /// </summary>
         private void InitializeComponent()
         {
-            this.universityTextBox = new VisualComponents.UniversityTextBox();
-            this.universityComboBox = new VisualComponents.UniversityComboBox();
-            this.universityListBox = new VisualComponents.UniversityListBox();
             this.buttonFillListBox = new System.Windows.Forms.Button();
             this.buttonPickFromListBox = new System.Windows.Forms.Button();
             this.buttonTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // universityTextBox
-            // 
-            this.universityTextBox.example = "shovkan@mail.ru";
-            this.universityTextBox.Location = new System.Drawing.Point(146, 13);
-            this.universityTextBox.Name = "universityTextBox";
-            this.universityTextBox.sample = "^[A-Za-z0-9]+(?:[._%+-])?[A-Za-z0-9._-]+[A-Za-z0-9]@[A-Za-z0-9]+(?:[.-])?[A-Za-z0" +
-    "-9._-]+\\.[A-Za-z]{2,6}$";
-            this.universityTextBox.Size = new System.Drawing.Size(150, 27);
-            this.universityTextBox.TabIndex = 4;
-            this.universityTextBox.value = null;
-            // 
-            // universityComboBox
-            // 
-            this.universityComboBox.item = null;
-            this.universityComboBox.Location = new System.Drawing.Point(12, 12);
-            this.universityComboBox.Name = "universityComboBox";
-            this.universityComboBox.Size = new System.Drawing.Size(128, 28);
-            this.universityComboBox.TabIndex = 3;
-            // 
-            // universityListBox
-            // 
-            this.universityListBox.index = -1;
-            this.universityListBox.Location = new System.Drawing.Point(12, 202);
-            this.universityListBox.Name = "universityListBox";
-            this.universityListBox.Size = new System.Drawing.Size(389, 207);
-            this.universityListBox.TabIndex = 5;
             // 
             // buttonFillListBox
             // 
@@ -90,7 +60,7 @@ namespace TestApp
             this.buttonTest.Name = "buttonTest";
             this.buttonTest.Size = new System.Drawing.Size(380, 236);
             this.buttonTest.TabIndex = 8;
-            this.buttonTest.Text = "Бэбра";
+            this.buttonTest.Text = "тест";
             this.buttonTest.UseVisualStyleBackColor = true;
             this.buttonTest.Click += new System.EventHandler(this.buttonTest_Click);
             // 
@@ -102,9 +72,6 @@ namespace TestApp
             this.Controls.Add(this.buttonTest);
             this.Controls.Add(this.buttonPickFromListBox);
             this.Controls.Add(this.buttonFillListBox);
-            this.Controls.Add(this.universityListBox);
-            this.Controls.Add(this.universityTextBox);
-            this.Controls.Add(this.universityComboBox);
             this.Name = "FormMain";
             this.Text = "Главная форма";
             this.ResumeLayout(false);
